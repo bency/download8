@@ -1,20 +1,19 @@
 #!/bin/bash
-
 function progress_bar {
     percentage=$1
     width=$(tput cols)
     mid_width=$((width/2))
-    width=$((width*percentage/100))
-    partial=$((width/100))
+    progress=$((width*percentage/100))
+    partial=$((progress/100))
     
-    for((j=0;j<=width;j++));do
+    for((j=0;j<=progress;j++));do
         printf "\r"
     done
 
-    if [ $width -lt $mid_width ];then
+    if [ $progress -le $mid_width ];then
 
         printf "\033[41m"
-        for((j=0;j<$width;j++));do
+        for((j=0;j<$progress;j++));do
 
             printf " "
         done
@@ -25,7 +24,9 @@ function progress_bar {
             printf " "
         done
 
-        printf "%d%%" $percentage
+        printf "%3d%%" $percentage
+
+ ####### fill out the rest space #########
 
         for((j=0;j<mid_width-3;j++));do
             printf " "
@@ -39,7 +40,7 @@ function progress_bar {
             printf " "
         done
 
-        diff=$((width-mid_width-1))
+        diff=$((progress-mid_width-1))
 
         if [ $diff -eq 0 ];then
 
@@ -48,19 +49,19 @@ function progress_bar {
 
         elif [ $diff -eq 1 ];then
 
-            printf "5\033[m0%%"
+            printf "5\033[m%d%%" $((percentage%10))
 
         elif [ $diff -eq 2 ];then
 
-            printf "50\033[m%%"
+            printf "5%d\033[m%%" $((percentage%10))
 
         elif [ $diff -eq 3 ];then
 
-            printf "50%%\033[m"
+            printf "5%d%%\033[m" $((percentage%10))
 
         else
 
-            printf "%d%%" $percentage
+            printf "%3d%%" $percentage
 
             for((j=0;j<diff-3;j++));do
 
@@ -68,6 +69,12 @@ function progress_bar {
             done
             
             printf "\033[m"
+
+ ####### fill out the rest space #########
+
+            for((j=0;j<width-progress;j++));do
+                printf " "
+            done
         
         fi
     fi
