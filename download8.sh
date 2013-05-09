@@ -25,7 +25,7 @@ function progress_bar {
             printf " "
         done
 
-        printf "%%%d" $percentage
+        printf "%d%%" $percentage
 
         for((j=0;j<mid_width-3;j++));do
             printf " "
@@ -44,23 +44,23 @@ function progress_bar {
         if [ $diff -eq 0 ];then
 
             printf "\033[m"
-            printf "%%%d" $percentage
+            printf "%d%%" $percentage
 
         elif [ $diff -eq 1 ];then
 
-            printf "%%\033[m%d" $percentage
+            printf "5\033[m0%%"
 
         elif [ $diff -eq 2 ];then
 
-            printf "%%5\033[m0"
+            printf "50\033[m%%"
 
         elif [ $diff -eq 3 ];then
 
-            printf "%%50\033[m"
+            printf "50%%\033[m"
 
         else
 
-            printf "%%%d" $percentage
+            printf "%d%%" $percentage
 
             for((j=0;j<diff-3;j++));do
 
@@ -75,15 +75,16 @@ function progress_bar {
 
 orign_lc_ctype=$LC_CTYPE
 export LC_CTYPE=C
-read -p "Enter the introduction page of comic: " url
-echo "Enter the start vol num"
-echo "輸入起始集(話)數 "
+clear
+echo -e "\033[35m貼上漫畫的介紹網址\033[m\033[1;30m(http://www.8comic.com/html/xxxxx.html)\033[m:"
+read  url
+echo -e "\033[35m輸入起始集(話)數\033[m:"
 read vol_start
-echo "Enter the end vol num"
-echo "輸入截止集(話)數"
+echo -e "\033[35m輸入截止集(話)數\033[m"
 read vol_end
-echo $url
 # get total vol index
+
+#echo -e "\033[35m取得漫畫分類\033[m"
 wget $url -O count_vol.html -o wget.log
 vol=$(grep --color=no "cview" count_vol.html | sed -e 's/.*="cview(\(.*\));.*/\1/g' | sed -e "s/'//g"| sed -e '/<script/d')
 catid=$(echo $vol | cut -d ' ' -f 1 | cut -d ',' -f2)
@@ -92,12 +93,15 @@ id=`echo $url | cut -d '/' -f5 | cut -d '.' -f1`
 iconv -f big5 -t utf8 count_vol.html > get_name.html
 comic_name=$(grep --color=no '12pt' get_name.html | sed 's/.*d;">\(.*\)<\/font> .*/\1/')
 
+echo -e "\033[35m漫畫名稱\033[m:\t$comic_name"
+echo -e "\033[35m起始集(話)數\033[m:\t$vol_start"
+echo -e "\033[35m截止集(話)數\033[m:\t$vol_end"
+
 wget http://www.8comic.com/js/comicview.js  -o wget.log
 vol_url=$(grep --color=no "\<$catid\>" comicview.js | sed -e 's/.*baseurl="\(.*\)".*/\1/')
 vol_url="$vol_url$id.html?ch=1"
 
 
-#vol_url="http://www.8comic.com/show/cool-$id.html?ch=1";
 wget -O index.html $vol_url  -o wget.log
 allcodes=$(grep --color=no "allcodes" index.html | sed -e 's/.*allcodes="\(.*\)";sho.*/\1/g')
 
@@ -106,7 +110,7 @@ total_vol=$((total_vol + 1))
 
 rm index.html comicview.js get_name.html count_vol.html
 
-echo "正在下載:"$comic_name
+echo -e "\n\033[35m開始下載\033[m:\t"$comic_name
 for ((i=1;i<=$total_vol;i++))
 do
     num=$(echo $allcodes | cut -d '|' -f $i | cut -d ' ' -f 1)
@@ -121,10 +125,12 @@ do
     mkdir -p $vol_name
 
     if [ $page -lt 60 ];then
-    echo "正在下載第$num話"
+    echo -e "\033[35m正在下載\033[33m第$num話\033[m"
     else
-    echo "正在下載第$num集"
+    echo -e "\033[35m正在下載\033[m:\033[33m第$num集\033[m"
     fi
+    
+    progress_bar 0
 
     for((p=1;p<=$page;p++))
     do
