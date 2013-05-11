@@ -1,6 +1,25 @@
 #!/bin/bash
 function progress_bar {
     percentage=$1
+    option=$2
+    case ${option} in
+        1) color="\033[41m"
+        ;;
+        2) color="\033[42m"
+        ;;
+        3) color="\033[43m"
+        ;;
+        4) color="\033[44m"
+        ;;
+        5) color="\033[45m"
+        ;;
+        6) color="\033[46m"
+        ;;
+        7) color="\033[47m"
+        ;;
+        *) color="\033[41m"
+        ;;
+    esac
     width=$(tput cols)
     mid_width=$((width/2))
     progress=$((width*percentage/100))
@@ -12,7 +31,7 @@ function progress_bar {
 
     if [ $progress -le $mid_width ];then
 
-        printf "\033[41m"
+        printf "$color"
         for((j=0;j<$progress;j++));do
 
             printf " "
@@ -34,7 +53,7 @@ function progress_bar {
 
     else
 
-        printf "\033[41m"
+        printf "$color"
         for((j=0;j<mid_width;j++));do
 
             printf " "
@@ -69,14 +88,14 @@ function progress_bar {
             done
             
             printf "\033[m"
+        
+        fi
 
  ####### fill out the rest space #########
 
             for((j=0;j<width-progress;j++));do
                 printf " "
             done
-        
-        fi
     fi
 }
 
@@ -117,9 +136,15 @@ total_vol=$((total_vol + 1))
 
 rm index.html comicview.js get_name.html count_vol.html
 
+total_page=0
+for ((i=1;i<=$total_vol;i++)); do
+    page=$(echo $allcodes | cut -d '|' -f $i | cut -d ' ' -f 4)
+    total_page=$((total_page + page))
+done
+
 echo -e "\n\033[35m開始下載\033[m:\t"$comic_name
-for ((i=1;i<=$total_vol;i++))
-do
+for ((i=1;i<=$total_vol;i++)); do
+
     num=$(echo $allcodes | cut -d '|' -f $i | cut -d ' ' -f 1)
     sid=$(echo $allcodes | cut -d '|' -f $i | cut -d ' ' -f 2)
     did=$(echo $allcodes | cut -d '|' -f $i | cut -d ' ' -f 3)
@@ -137,11 +162,15 @@ do
     echo -e "\033[35m正在下載\033[m:\033[33m第$num集\033[m"
     fi
     
-    progress_bar 0
+    progress_bar 0 1
+    echo ""
+    progress_bar 0 2
 
-    for((p=1;p<=$page;p++))
-    do
-        percentage=$((p*100/page))
+    pp=0
+    for ((p=1;p<=$page;p++)); do
+        pp=$((pp+1))
+        total_percentage=$((pp*100/total_page))
+        percentages=$((p*100/page))
         if [ $p -lt 10 ];then
         img="00$p"
         elif [ $p -lt 100 ];then
@@ -153,8 +182,19 @@ do
         pic_name=$img
         img=$img"_"${code:$m:3}".jpg"
         pic_url="http://img$sid.8comic.com/$did/$id/$num/$img"
-        wget -O "$vol_name/$pic_name.jpg" $pic_url -o wget.log
-        progress_bar $percentage
+        wget -c -O "$vol_name/$pic_name.jpg" $pic_url -o wget.log
+        clear
+        echo -e "\033[35m漫畫名稱\033[m:\t$comic_name"
+        echo -e "\033[35m起始集(話)數\033[m:\t$vol_start"
+        echo -e "\033[35m截止集(話)數\033[m:\t$vol_end"
+        if [ $page -lt 60 ];then
+        echo -e "\033[35m正在下載\033[33m第$num話\033[m \033[35m第\033[33m$p/$page\033[35m頁\033[m"
+        else
+        echo -e "\033[35m正在下載\033[m:\033[33m第$num集\033[m \033[35m第\033[33m$p/$page\033[35m頁\033[m"
+        fi
+        progress_bar $total_percentage 1
+        echo ""
+        progress_bar $percentages 2
     done
 
     fi
