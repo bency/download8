@@ -143,6 +143,7 @@ for ((i=1;i<=$total_vol;i++)); do
 done
 
 echo -e "\n\033[35m開始下載\033[m:\t"$comic_name
+pp=0
 for ((i=1;i<=$total_vol;i++)); do
 
     num=$(echo $allcodes | cut -d '|' -f $i | cut -d ' ' -f 1)
@@ -166,17 +167,16 @@ for ((i=1;i<=$total_vol;i++)); do
     echo ""
     progress_bar 0 2
 
-    pp=0
     for ((p=1;p<=$page;p++)); do
         pp=$((pp+1))
         total_percentage=$((pp*100/total_page))
         percentages=$((p*100/page))
         if [ $p -lt 10 ];then
-        img="00$p"
-        elif [ $p -lt 100 ];then
-        img="0$p"
-        else
-        img=$p;
+            img="00$p"
+            elif [ $p -lt 100 ];then
+            img="0$p"
+            else
+            img=$p;
         fi
         m=$((((p-1)/10)%10 + ((p-1)%10)*3))
         pic_name=$img
@@ -188,9 +188,9 @@ for ((i=1;i<=$total_vol;i++)); do
         echo -e "\033[35m起始集(話)數\033[m:\t$vol_start"
         echo -e "\033[35m截止集(話)數\033[m:\t$vol_end"
         if [ $page -lt 60 ];then
-        echo -e "\033[35m正在下載\033[33m第$num話\033[m \033[35m第\033[33m$p/$page\033[35m頁\033[m"
-        else
-        echo -e "\033[35m正在下載\033[m:\033[33m第$num集\033[m \033[35m第\033[33m$p/$page\033[35m頁\033[m"
+            echo -e "\033[35m正在下載\033[33m第$num話\033[m \033[35m第\033[33m$p/$page\033[35m頁\033[m"
+            else
+            echo -e "\033[35m正在下載\033[m:\033[33m第$num集\033[m \033[35m第\033[33m$p/$page\033[35m頁\033[m"
         fi
         progress_bar $total_percentage 1
         echo ""
