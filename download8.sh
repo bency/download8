@@ -1,4 +1,7 @@
 #!/bin/bash
+function usage {
+    echo -e "Usage: $0 --comic-url=http://www.8comic.com/html/xxx.html --vol-start=1 --vol-end=999"
+}
 function progress_bar {
     percentage=$1
     option=$2
@@ -101,13 +104,42 @@ function progress_bar {
 
 orign_lc_ctype=$LC_CTYPE
 export LC_CTYPE=C
-clear
-echo -e "\033[35m貼上漫畫的介紹網址\033[m\033[1;30m(http://www.8comic.com/html/xxxxx.html)\033[m:"
-read  url
-echo -e "\033[35m輸入起始集(話)數\033[m:"
-read vol_start
-echo -e "\033[35m輸入截止集(話)數\033[m"
-read vol_end
+if [ $# -eq 0 ];then
+    clear
+    echo -e "\033[35m貼上漫畫的介紹網址\033[m\033[1;30m(http://www.8comic.com/html/xxxxx.html)\033[m:"
+    read  url
+    echo -e "\033[35m輸入起始集(話)數\033[m:"
+    read vol_start
+    echo -e "\033[35m輸入截止集(話)數\033[m"
+    read vol_end
+elif [ $# -eq 3 ];then
+    for arg do
+        case "$arg" in
+
+        --comic-url=*) url=`echo "$arg" | sed -e 's/^[^=]*=//'` ;;
+
+        --start-vol=*) vol_start=`echo "$arg" | sed -e 's/^[^=]*=//'` ;;
+
+        --end-vol=*) vol_end=`echo "$arg" | sed -e 's/^[^=]*=//'` ;;
+        esac
+    done
+    if [[ ! $url =~ http://www.8comic.com/html/[0-9]*\.html ]];then
+        usage
+        exit
+    fi
+    if [[ ! $vol_start =~ (^[0-9]{1,}$) ]];then
+        echo $vol_start
+        usage
+        exit
+    fi
+    if [[ ! $vol_end =~ (^[0-9]{1,}$) ]];then
+        usage
+        exit
+    fi
+else
+    usage
+    exit
+fi
 # get total vol index
 
 #echo -e "\033[35m取得漫畫分類\033[m"
