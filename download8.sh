@@ -1,6 +1,6 @@
 #!/bin/bash
 function usage {
-    echo -e "Usage: $0 --comic-url=http://www.8comic.com/html/xxx.html --vol-start=1 --vol-end=999"
+    echo -e "Usage: $0 --comic-url=http://www.8comic.com/html/xxx.html --start-vol=1 --end-vol=999"
 }
 function progress_bar {
     percentage=$1
