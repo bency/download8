@@ -106,7 +106,7 @@ orign_lc_ctype=$LC_CTYPE
 export LC_CTYPE=C
 if [ $# -eq 0 ];then
     clear
-    echo -e "\033[35m貼上漫畫的介紹網址\033[m\033[1;30m(http://www.8comic.com/html/xxxxx.html)\033[m:"
+    echo -e "\033[35m貼上漫畫的介紹網址\033[m\033[1;31m(http://www.8comic.com/html/xxxxx.html)\033[m:"
     read  url
     echo -e "\033[35m輸入起始集(話)數\033[m:"
     read vol_start
@@ -143,10 +143,18 @@ fi
 # get total vol index
 
 #echo -e "\033[35m取得漫畫分類\033[m"
+printf "%s" "正在取得漫畫介紹頁面"
 wget $url -O count_vol.html -o wget.log
-vol=$(grep --color=no "cview" count_vol.html | sed -e 's/.*="cview(\(.*\));.*/\1/g' | sed -e "s/'//g"| sed -e '/<script/d')
-catid=$(echo $vol | cut -d ' ' -f 1 | cut -d ',' -f2)
-id=`echo $url | cut -d '/' -f5 | cut -d '.' -f1`
+error=$(grep --color=no "Not Found" wget.log)
+if [[ ! $error = "" ]];then
+    echo
+    echo "無法取得漫畫介紹網頁 請聯絡作者 bency80097@gmail.com"
+    rm index.html comicview.js get_name.html count_vol.html wget.log
+    exit;
+else
+    printf "%s" ".........OK"
+    echo 
+fi
 
 iconv -f big5 -t utf8 count_vol.html > get_name.html
 comic_name=$(grep --color=no '12pt' get_name.html | sed 's/.*d;">\(.*\)<\/font> .*/\1/')
@@ -155,6 +163,41 @@ echo -e "\033[35m漫畫名稱\033[m:\t$comic_name"
 echo -e "\033[35m起始集(話)數\033[m:\t$vol_start"
 echo -e "\033[35m截止集(話)數\033[m:\t$vol_end"
 
+vol=$(grep --color=no "cview" count_vol.html | sed -e 's/.*="cview(\(.*\));.*/\1/g' | sed -e "s/'//g"| sed -e '/<script/d')
+
+printf "%s" "正在取得級數目錄"
+if [[ $vol = "" ]];then
+    echo
+    echo "無法取得集數目錄 請聯絡作者 bency80097@gmail.com"
+    exit;
+else
+    printf "%s" ".........OK"
+    echo 
+fi
+
+catid=$(echo $vol | cut -d ' ' -f 1 | cut -d ',' -f2)
+
+printf "%s" "正在取得漫畫分類id"
+if [[ $catid = "" ]];then
+    echo
+    echo "無法取得漫畫分類id 請聯絡作者 bency80097@gmail.com"
+    exit;
+else
+    printf "%s" ".......OK"
+    echo 
+fi
+
+id=`echo $url | cut -d '/' -f5 | cut -d '.' -f1`
+
+printf "%s" "正在取得漫畫分類id"
+if [[ ! $id =~ (^[0-9]{1,}$) ]];then
+    echo "無法取得漫畫id 請聯絡作者 bency80097@gmail.com"
+    exit;
+else
+    printf "%s" ".........OK"
+    echo 
+fi
+
 wget http://www.8comic.com/js/comicview.js  -o wget.log
 vol_url=$(grep --color=no "\<$catid\>" comicview.js | sed -e 's/.*baseurl="\(.*\)".*/\1/')
 vol_url="$vol_url$id.html?ch=1"
@@ -162,11 +205,16 @@ vol_url="$vol_url$id.html?ch=1"
 
 wget -O index.html $vol_url  -o wget.log
 allcodes=$(grep --color=no "allcodes" index.html | sed -e 's/.*allcodes="\(.*\)";sho.*/\1/g')
+if [[ $allcodes = "" ]];then
+    echo "找不到單本（話）下載網址，請與作者聯絡 bency80097@gmail.com"
+    rm index.html comicview.js get_name.html count_vol.html wget.log
+    exit
+fi
 
 total_vol=$(grep -o "|" <<< $allcodes | wc -l)
 total_vol=$((total_vol + 1))
 
-rm index.html comicview.js get_name.html count_vol.html
+rm index.html comicview.js get_name.html count_vol.html wget.log
 
 total_page=0
 for ((i=1;i<=$total_vol;i++)); do
