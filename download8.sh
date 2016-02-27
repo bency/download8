@@ -262,17 +262,15 @@ for ((i=1;i<=$total_vol;i++)); do
     page=$(echo $allcodes | cut -d '|' -f $i | cut -d ' ' -f 4)
     code=$(echo $allcodes | cut -d '|' -f $i | cut -d ' ' -f 5)
 
-    if [ $num -ge $vol_start ] && [ $num -le $vol_end ];then
-
     vol_name=$comic_name"/vol-$num"
     mkdir -p $vol_name
 
     if [ $page -lt 60 ];then
-    echo -e "\033[35m正在下載\033[33m第$num話\033[m"
+        echo -e "\033[35m正在下載\033[33m第$num話\033[m"
     else
-    echo -e "\033[35m正在下載\033[m:\033[33m第$num集\033[m"
+        echo -e "\033[35m正在下載\033[m:\033[33m第$num集\033[m"
     fi
-    
+
     progress_bar 0 1
     echo ""
     progress_bar 0 2
@@ -306,8 +304,6 @@ for ((i=1;i<=$total_vol;i++)); do
         echo ""
         progress_bar $percentages 2
     done
-
-    fi
 done
 
 export LC_CTYPE=$orign_lc_ctype
