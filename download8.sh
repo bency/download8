@@ -255,7 +255,7 @@ done
 
 echo -e "\n\033[35m開始下載\033[m:\t"$comic_name
 pp=0
-for ((i=1;i<=$total_vol;i++)); do
+for ((i=$vol_start;i<=$vol_end;i++)); do
 
     num=$(echo $allcodes | cut -d '|' -f $i | cut -d ' ' -f 1)
     sid=$(echo $allcodes | cut -d '|' -f $i | cut -d ' ' -f 2)
