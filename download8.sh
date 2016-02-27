@@ -175,21 +175,20 @@ else
     echo 
 fi
 
-catid=$(echo $vol | cut -d ' ' -f 1 | cut -d ',' -f2)
+catid=$(echo $vol | cut -d ' ' -f1 | cut -d ',' -f2)
 
-printf "%s" "正在取得漫畫分類id"
+printf "%s" "正在取得漫畫分類 catid"
 if [[ $catid = "" ]];then
     echo
-    echo "無法取得漫畫分類id 請聯絡作者 bency80097@gmail.com"
+    echo "無法取得漫畫分類 catid 請聯絡作者 bency80097@gmail.com"
     exit;
 else
     printf "%s" ".......OK"
     echo 
 fi
 
-id=`echo $url | cut -d '/' -f5 | cut -d '.' -f1`
-
-printf "%s" "正在取得漫畫分類id"
+id=$(echo $url | cut -d '/' -f5 | cut -d '.' -f1)
+printf "%s" "正在取得漫畫分類 id"
 if [[ ! $id =~ (^[0-9]{1,}$) ]];then
     echo "無法取得漫畫id 請聯絡作者 bency80097@gmail.com"
     exit;
