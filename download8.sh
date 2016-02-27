@@ -1,7 +1,7 @@
 #!/bin/bash
 factor=50
 function usage {
-    echo -e "Usage: $0 --comic-url=http://www.8comic.com/html/xxx.html --start-vol=1 --end-vol=999"
+    echo -e "Usage: $0 --comic-url=http://www.comicbus/html/xxx.html --start-vol=1 --end-vol=999"
 }
 function progress_bar {
     percentage=$1
@@ -134,7 +134,7 @@ orign_lc_ctype=$LC_CTYPE
 export LC_CTYPE=C
 if [ $# -eq 0 ];then
     clear
-    echo -e "\033[35m貼上漫畫的介紹網址\033[m\033[1;31m(http://www.8comic.com/html/xxxxx.html)\033[m:"
+    echo -e "\033[35m貼上漫畫的介紹網址\033[m\033[1;31m(http://www.comicbus.com/html/xxxxx.html)\033[m:"
     read  url
     echo -e "\033[35m輸入起始集(話)數\033[m:"
     read vol_start
