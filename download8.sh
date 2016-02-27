@@ -262,8 +262,8 @@ for ((vol=$vol_start;vol<=$vol_end;vol++)); do
     sid=$(ss $vol_hash 4 2)
     did=$(ss $vol_hash 6 1)
 
-    vol_name=$comic_name"/vol-$vol"
-    mkdir -p $vol_name
+    vol_path=$comic_name"/vol-$vol"
+    mkdir -p $vol_path
 
     if [ $pages -lt 60 ];then
         echo -e "\033[35m正在下載\033[33m第$vol話\033[m"
@@ -291,7 +291,7 @@ for ((vol=$vol_start;vol<=$vol_end;vol++)); do
         pic_name=$img
         img=$img"_"$code".jpg"
         pic_url="http://img$sid.8comic.com/$did/$id/$vol/$img"
-        wget -c -O "$vol_name/$pic_name.jpg" $pic_url -o wget.log
+        wget -c -O "$vol_path/$pic_name.jpg" $pic_url -o wget.log
         clear
         echo -e "\033[35m漫畫名稱\033[m:\t$comic_name"
         echo -e "\033[35m起始集(話)數\033[m:\t$vol_start"
