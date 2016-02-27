@@ -271,16 +271,6 @@ for ((vol=$vol_start;vol<=$vol_end;vol++)); do
     vol_path=$comic_name"/vol-$vol"
     mkdir -p $vol_path
 
-    if [ $pages -lt 60 ];then
-        echo -e "\033[35m正在下載\033[33m第$vol話\033[m"
-    else
-        echo -e "\033[35m正在下載\033[m:\033[33m第$vol集\033[m"
-    fi
-
-    progress_bar 0 1
-    echo ""
-    progress_bar 0 2
-
     for ((page=1;page<=$pages;page++)); do
         code=$(ss $vol_hash $(($(mm $page)+10)) 3 $factor)
         page_percentage=$((page_percentage+1))
