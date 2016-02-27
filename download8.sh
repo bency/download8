@@ -253,20 +253,20 @@ done
 
 echo -e "\n\033[35m開始下載\033[m:\t"$comic_name
 pp=0
-for ((num=$vol_start;num<=$vol_end;num++)); do
+for ((vol=$vol_start;vol<=$vol_end;vol++)); do
 
     vol_hash=$(volHash $allcodes $i)
     page=$(ss $vol_hash 7 3);
     sid=$(ss $vol_hash 4 2)
     did=$(ss $vol_hash 6 1)
 
-    vol_name=$comic_name"/vol-$num"
+    vol_name=$comic_name"/vol-$vol"
     mkdir -p $vol_name
 
     if [ $page -lt 60 ];then
-        echo -e "\033[35m正在下載\033[33m第$num話\033[m"
+        echo -e "\033[35m正在下載\033[33m第$vol話\033[m"
     else
-        echo -e "\033[35m正在下載\033[m:\033[33m第$num集\033[m"
+        echo -e "\033[35m正在下載\033[m:\033[33m第$vol集\033[m"
     fi
 
     progress_bar 0 1
@@ -288,16 +288,16 @@ for ((num=$vol_start;num<=$vol_end;num++)); do
         m=$((((p-1)/10)%10 + ((p-1)%10)*3))
         pic_name=$img
         img=$img"_"$code".jpg"
-        pic_url="http://img$sid.8comic.com/$did/$id/$num/$img"
+        pic_url="http://img$sid.8comic.com/$did/$id/$vol/$img"
         wget -c -O "$vol_name/$pic_name.jpg" $pic_url -o wget.log
         clear
         echo -e "\033[35m漫畫名稱\033[m:\t$comic_name"
         echo -e "\033[35m起始集(話)數\033[m:\t$vol_start"
         echo -e "\033[35m截止集(話)數\033[m:\t$vol_end"
         if [ $page -lt 60 ];then
-            echo -e "\033[35m正在下載\033[33m第$num話\033[m \033[35m第\033[33m$p/$page\033[35m頁\033[m"
+            echo -e "\033[35m正在下載\033[33m第$vol話\033[m \033[35m第\033[33m$p/$page\033[35m頁\033[m"
             else
-            echo -e "\033[35m正在下載\033[m:\033[33m第$num集\033[m \033[35m第\033[33m$p/$page\033[35m頁\033[m"
+            echo -e "\033[35m正在下載\033[m:\033[33m第$vol集\033[m \033[35m第\033[33m$p/$page\033[35m頁\033[m"
         fi
         progress_bar $total_percentage 1
         echo ""
