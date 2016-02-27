@@ -130,8 +130,6 @@ function mm {
     echo $((($1-1)/10%10+($1-1)%10*3))
 }
 
-orign_lc_ctype=$LC_CTYPE
-export LC_CTYPE=C
 if [ $# -eq 0 ];then
     clear
     echo -e "\033[35m貼上漫畫的介紹網址\033[m\033[1;31m(http://www.comicbus.com/html/xxxxx.html)\033[m:"
@@ -183,6 +181,8 @@ else
     printf "%s" ".........OK"
     echo 
 fi
+orign_lc_ctype=$LC_CTYPE
+export LC_CTYPE=C
 
 iconv -f BIG-5 -t UTF-8 count_vol.html > get_name.html
 comic_name=$(grep --color=no '12pt' get_name.html | sed 's/.*d;">\(.*\)<\/font> .*/\1/')
@@ -190,6 +190,7 @@ if [[ $comic_name == "" ]]
 then
     echo "無法取得漫畫名稱";
     rm index.html comicview.js get_name.html count_vol.html wget.log
+    export LC_CTYPE=$orign_lc_ctype
     exit;
 fi
 
@@ -203,6 +204,7 @@ printf "%s" "正在取得級數目錄"
 if [[ $vol = "" ]];then
     echo
     echo "無法取得集數目錄 請聯絡作者 bency80097@gmail.com"
+    export LC_CTYPE=$orign_lc_ctype
     exit;
 else
     printf "%s" ".........OK"
@@ -215,6 +217,7 @@ printf "%s" "正在取得漫畫分類 catid"
 if [[ $catid = "" ]];then
     echo
     echo "無法取得漫畫分類 catid 請聯絡作者 bency80097@gmail.com"
+    export LC_CTYPE=$orign_lc_ctype
     exit;
 else
     printf "%s" ".......OK"
@@ -225,6 +228,7 @@ id=$(echo $url | cut -d '/' -f5 | cut -d '.' -f1)
 printf "%s" "正在取得漫畫分類 id"
 if [[ ! $id =~ (^[0-9]{1,}$) ]];then
     echo "無法取得漫畫id 請聯絡作者 bency80097@gmail.com"
+    export LC_CTYPE=$orign_lc_ctype
     exit;
 else
     printf "%s" ".........OK"
