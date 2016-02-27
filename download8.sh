@@ -117,8 +117,6 @@ function volHash {
 }
 function ss {
     a=$1
-    b=$2
-    c=$3
     e=${a:$2:$3}
     if [ -z $4 ]
     then
@@ -129,8 +127,7 @@ function ss {
 }
 
 function mm {
-    p=$1
-    echo $(((p-1)/10%10+(p-1)%10*3))
+    echo $((($1-1)/10%10+($1-1)%10*3))
 }
 
 orign_lc_ctype=$LC_CTYPE
