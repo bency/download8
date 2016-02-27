@@ -240,9 +240,7 @@ if [[ $allcodes = "" ]];then
     rm index.html comicview.js get_name.html count_vol.html wget.log
     exit
 fi
-
-total_vol=$(grep -o "|" <<< $allcodes | wc -l)
-total_vol=$((total_vol + 1))
+total_vol=$((${#allcodes}/factor - 1))
 
 rm index.html comicview.js get_name.html count_vol.html wget.log
 
@@ -257,10 +255,10 @@ echo -e "\n\033[35m開始下載\033[m:\t"$comic_name
 pp=0
 for ((num=$vol_start;num<=$vol_end;num++)); do
 
-    sid=$(echo $allcodes | cut -d '|' -f $i | cut -d ' ' -f 2)
-    did=$(echo $allcodes | cut -d '|' -f $i | cut -d ' ' -f 3)
-    page=$(echo $allcodes | cut -d '|' -f $i | cut -d ' ' -f 4)
-    code=$(echo $allcodes | cut -d '|' -f $i | cut -d ' ' -f 5)
+    vol_hash=$(volHash $allcodes $i)
+    page=$(ss $vol_hash 7 3);
+    sid=$(ss $vol_hash 4 2)
+    did=$(ss $vol_hash 6 1)
 
     vol_name=$comic_name"/vol-$num"
     mkdir -p $vol_name
@@ -276,6 +274,7 @@ for ((num=$vol_start;num<=$vol_end;num++)); do
     progress_bar 0 2
 
     for ((p=1;p<=$page;p++)); do
+        code=$(ss $vol_hash $(($(mm $p)+10)) 3 $factor)
         pp=$((pp+1))
         total_percentage=$((pp*100/total_page))
         percentages=$((p*100/page))
@@ -288,7 +287,7 @@ for ((num=$vol_start;num<=$vol_end;num++)); do
         fi
         m=$((((p-1)/10)%10 + ((p-1)%10)*3))
         pic_name=$img
-        img=$img"_"${code:$m:3}".jpg"
+        img=$img"_"$code".jpg"
         pic_url="http://img$sid.8comic.com/$did/$id/$num/$img"
         wget -c -O "$vol_name/$pic_name.jpg" $pic_url -o wget.log
         clear
