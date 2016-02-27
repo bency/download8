@@ -247,8 +247,9 @@ total_vol=$((total_vol + 1))
 rm index.html comicview.js get_name.html count_vol.html wget.log
 
 total_page=0
-for ((i=1;i<=$total_vol;i++)); do
-    page=$(echo $allcodes | cut -d '|' -f $i | cut -d ' ' -f 4)
+for ((i=$vol_start;i<=$vol_end;i++)); do
+    vol_hash=$(volHash $allcodes $i)
+    page=$(ss $vol_hash 7 3);
     total_page=$((total_page + page))
 done
 
