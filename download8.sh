@@ -274,7 +274,7 @@ for ((vol=$vol_start;vol<=$vol_end;vol++)); do
         code=$(ss $vol_hash $(($(mm $page)+10)) 3 $factor)
         page_percentage=$((page_percentage+1))
         total_percentage=$((page_percentage*100/total_page))
-        percentages=$((page*100/pages))
+        vol_percentages=$((page*100/pages))
         if [ $page -lt 10 ];then
             img="00$page"
             elif [ $page -lt 100 ];then
@@ -298,7 +298,7 @@ for ((vol=$vol_start;vol<=$vol_end;vol++)); do
         fi
         progress_bar $total_percentage 1
         echo ""
-        progress_bar $percentages 2
+        progress_bar $vol_percentages 2
     done
 done
 
