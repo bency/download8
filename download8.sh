@@ -184,7 +184,7 @@ else
     echo 
 fi
 
-iconv -f big5 -t utf8 count_vol.html > get_name.html
+iconv -f BIG-5 -t UTF-8 count_vol.html > get_name.html
 comic_name=$(grep --color=no '12pt' get_name.html | sed 's/.*d;">\(.*\)<\/font> .*/\1/')
 
 echo -e "\033[35m漫畫名稱\033[m:\t$comic_name"
