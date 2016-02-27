@@ -149,7 +149,7 @@ elif [ $# -eq 3 ];then
         --end-vol=*) vol_end=`echo "$arg" | sed -e 's/^[^=]*=//'` ;;
         esac
     done
-    if [[ ! $url =~ http://www.8comic.com/html/[0-9]*\.html ]];then
+    if [[ ! $url =~ http://www.comicbus.com/html/[0-9]*\.html ]];then
         usage
         exit
     fi
