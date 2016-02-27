@@ -238,6 +238,7 @@ vol_url="http://www.comicbus.com$vol_url$id.html?ch=1"
 
 wget -O index.html $vol_url  -o wget.log
 allcodes=$(grep --color=no -oh "cs='[a-z0-9]*'" index.html | sed -e "s/cs='\(.*\)'/\1/g")
+export LC_CTYPE=$orign_lc_ctype
 if [[ $allcodes = "" ]];then
     echo "找不到單本（話）下載網址，請與作者聯絡 bency80097@gmail.com"
     rm index.html comicview.js get_name.html count_vol.html wget.log
@@ -307,5 +308,3 @@ for ((vol=$vol_start;vol<=$vol_end;vol++)); do
         progress_bar $vol_percentages 2
     done
 done
-
-export LC_CTYPE=$orign_lc_ctype
