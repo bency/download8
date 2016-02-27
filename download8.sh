@@ -252,7 +252,7 @@ echo -e "\n\033[35m開始下載\033[m:\t"$comic_name
 pp=0
 for ((vol=$vol_start;vol<=$vol_end;vol++)); do
 
-    vol_hash=$(volHash $allcodes $i)
+    vol_hash=$(volHash $allcodes $vol)
     page=$(ss $vol_hash 7 3);
     sid=$(ss $vol_hash 4 2)
     did=$(ss $vol_hash 6 1)
