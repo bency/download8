@@ -1,4 +1,5 @@
 #!/bin/bash
+factor=50
 function usage {
     echo -e "Usage: $0 --comic-url=http://www.8comic.com/html/xxx.html --start-vol=1 --end-vol=999"
 }
@@ -100,6 +101,36 @@ function progress_bar {
                 printf " "
             done
     fi
+}
+function volHash {
+    comicHash=$1
+    ch=$2
+    cc=${#comicHash}
+    for((i=0;i<cc/factor;i++));do
+        if [ "$(ss $comicHash $((i*factor)) 4)" == "$ch" ]
+        then
+            echo $(ss $comicHash $((i*factor)) $factor $factor)
+            exit;
+        fi
+    done
+    echo $(ss $comicHash $(((i-1)*factor)) 4)
+}
+function ss {
+    a=$1
+    b=$2
+    c=$3
+    e=${a:$2:$3}
+    if [ -z $4 ]
+    then
+        echo $e | sed "s/[a-zA-Z]//g"
+    else
+        echo $e
+    fi
+}
+
+function mm {
+    p=$1
+    echo $(((p-1)/10%10+(p-1)%10*3))
 }
 
 orign_lc_ctype=$LC_CTYPE
