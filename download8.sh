@@ -249,7 +249,7 @@ for ((i=$vol_start;i<=$vol_end;i++)); do
 done
 
 echo -e "\n\033[35m開始下載\033[m:\t"$comic_name
-pp=0
+page_percentage=0
 for ((vol=$vol_start;vol<=$vol_end;vol++)); do
 
     vol_hash=$(volHash $allcodes $vol)
@@ -272,8 +272,8 @@ for ((vol=$vol_start;vol<=$vol_end;vol++)); do
 
     for ((page=1;page<=$pages;page++)); do
         code=$(ss $vol_hash $(($(mm $page)+10)) 3 $factor)
-        pp=$((pp+1))
-        total_percentage=$((pp*100/total_page))
+        page_percentage=$((page_percentage+1))
+        total_percentage=$((page_percentage*100/total_page))
         percentages=$((page*100/pages))
         if [ $page -lt 10 ];then
             img="00$page"
