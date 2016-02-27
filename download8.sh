@@ -197,9 +197,9 @@ else
     echo 
 fi
 
-wget http://www.8comic.com/js/comicview.js  -o wget.log
+wget http://www.comicbus.com/js/comicview.js  -o wget.log
 vol_url=$(grep --color=no "\<$catid\>" comicview.js | sed -e 's/.*baseurl="\(.*\)".*/\1/')
-vol_url="$vol_url$id.html?ch=1"
+vol_url="http://www.comicbus.com$vol_url$id.html?ch=1"
 
 
 wget -O index.html $vol_url  -o wget.log
