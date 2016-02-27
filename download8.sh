@@ -186,6 +186,11 @@ fi
 
 iconv -f BIG-5 -t UTF-8 count_vol.html > get_name.html
 comic_name=$(grep --color=no '12pt' get_name.html | sed 's/.*d;">\(.*\)<\/font> .*/\1/')
+if [[ $comic_name == "" ]]
+    echo "無法取得漫畫名稱";
+    rm index.html comicview.js get_name.html count_vol.html wget.log
+    exit;
+fi
 
 echo -e "\033[35m漫畫名稱\033[m:\t$comic_name"
 echo -e "\033[35m起始集(話)數\033[m:\t$vol_start"
