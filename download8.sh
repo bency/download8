@@ -294,7 +294,7 @@ for ((vol=$vol_start;vol<=$vol_end;vol++)); do
         echo -e "\033[35m截止集(話)數\033[m:\t$vol_end"
         if [ $pages -lt 60 ];then
             echo -e "\033[35m正在下載\033[33m第$vol話\033[m \033[35m第\033[33m$page/$pages\033[35m頁\033[m"
-            else
+        else
             echo -e "\033[35m正在下載\033[m:\033[33m第$vol集\033[m \033[35m第\033[33m$page/$pages\033[35m頁\033[m"
         fi
         progress_bar $total_percentage 1
