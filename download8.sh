@@ -270,19 +270,19 @@ for ((vol=$vol_start;vol<=$vol_end;vol++)); do
     echo ""
     progress_bar 0 2
 
-    for ((p=1;p<=$pages;p++)); do
-        code=$(ss $vol_hash $(($(mm $p)+10)) 3 $factor)
+    for ((page=1;page<=$pages;page++)); do
+        code=$(ss $vol_hash $(($(mm $page)+10)) 3 $factor)
         pp=$((pp+1))
         total_percentage=$((pp*100/total_page))
-        percentages=$((p*100/pages))
-        if [ $p -lt 10 ];then
-            img="00$p"
-            elif [ $p -lt 100 ];then
-            img="0$p"
+        percentages=$((page*100/pages))
+        if [ $page -lt 10 ];then
+            img="00$page"
+            elif [ $page -lt 100 ];then
+            img="0$page"
             else
-            img=$p;
+            img=$page;
         fi
-        m=$((((p-1)/10)%10 + ((p-1)%10)*3))
+        m=$((((page-1)/10)%10 + ((page-1)%10)*3))
         pic_name=$img
         img=$img"_"$code".jpg"
         pic_url="http://img$sid.8comic.com/$did/$id/$vol/$img"
@@ -292,9 +292,9 @@ for ((vol=$vol_start;vol<=$vol_end;vol++)); do
         echo -e "\033[35m起始集(話)數\033[m:\t$vol_start"
         echo -e "\033[35m截止集(話)數\033[m:\t$vol_end"
         if [ $pages -lt 60 ];then
-            echo -e "\033[35m正在下載\033[33m第$vol話\033[m \033[35m第\033[33m$p/$pages\033[35m頁\033[m"
+            echo -e "\033[35m正在下載\033[33m第$vol話\033[m \033[35m第\033[33m$page/$pages\033[35m頁\033[m"
             else
-            echo -e "\033[35m正在下載\033[m:\033[33m第$vol集\033[m \033[35m第\033[33m$p/$pages\033[35m頁\033[m"
+            echo -e "\033[35m正在下載\033[m:\033[33m第$vol集\033[m \033[35m第\033[33m$page/$pages\033[35m頁\033[m"
         fi
         progress_bar $total_percentage 1
         echo ""
