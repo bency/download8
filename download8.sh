@@ -51,9 +51,10 @@ if [[ ! $error = "" ]];then
     exit;
 else
     printf "%s" ".........OK"
-    echo 
+    echo
 fi
 orign_lc_ctype=$LC_CTYPE
+trap "export LC_CTYPE=$orign_lc_ctype; exit" SIGTERM SIGINT SIGHUP EXIT
 export LC_CTYPE=C
 
 iconv -f BIG-5 -t UTF-8 count_vol.html > get_name.html
@@ -62,7 +63,6 @@ if [[ $comic_name == "" ]]
 then
     echo "無法取得漫畫名稱";
     rm index.html comicview.js get_name.html count_vol.html wget.log
-    export LC_CTYPE=$orign_lc_ctype
     exit;
 fi
 
@@ -76,11 +76,10 @@ printf "%s" "正在取得級數目錄"
 if [[ $vol = "" ]];then
     echo
     echo "無法取得集數目錄 請聯絡作者 bency80097@gmail.com"
-    export LC_CTYPE=$orign_lc_ctype
     exit;
 else
     printf "%s" ".........OK"
-    echo 
+    echo
 fi
 
 catid=$(echo $vol | cut -d ' ' -f1 | cut -d ',' -f2)
@@ -89,22 +88,20 @@ printf "%s" "正在取得漫畫分類 catid"
 if [[ $catid = "" ]];then
     echo
     echo "無法取得漫畫分類 catid 請聯絡作者 bency80097@gmail.com"
-    export LC_CTYPE=$orign_lc_ctype
     exit;
 else
     printf "%s" ".......OK"
-    echo 
+    echo
 fi
 
 id=$(echo $url | cut -d '/' -f5 | cut -d '.' -f1)
 printf "%s" "正在取得漫畫分類 id"
 if [[ ! $id =~ (^[0-9]{1,}$) ]];then
     echo "無法取得漫畫id 請聯絡作者 bency80097@gmail.com"
-    export LC_CTYPE=$orign_lc_ctype
     exit;
 else
     printf "%s" ".........OK"
-    echo 
+    echo
 fi
 
 wget http://www.comicbus.com/js/comicview.js  -o wget.log
@@ -114,7 +111,6 @@ vol_url="http://www.comicbus.com$vol_url$id.html?ch=1"
 
 wget -O index.html $vol_url  -o wget.log
 allcodes=$(grep --color=no -oh "cs='[a-z0-9]*'" index.html | sed -e "s/cs='\(.*\)'/\1/g")
-export LC_CTYPE=$orign_lc_ctype
 if [[ $allcodes = "" ]];then
     echo "找不到單本（話）下載網址，請與作者聯絡 bency80097@gmail.com"
     rm index.html comicview.js get_name.html count_vol.html wget.log
